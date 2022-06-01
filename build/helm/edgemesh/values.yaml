@@ -1,5 +1,5 @@
 server:
-  image: kubeedge/edgemesh-server:latest
+  image: kubeedge/edgemesh-server:v1.10.0-22-gaa2119a4
   nodeName: "your cloud node name"
   affinity: {}
   # nodeAffinity:
@@ -43,8 +43,39 @@ server:
       transport: tcp
 
 agent:
-  image: kubeedge/edgemesh-agent:latest
-  affinity: {}
+  image: kubeedge/edgemesh-agent:v1.10.0-22-gaa2119a4
+  armImage: kubeedge/edgemesh-agent-arm64:v1.10.0
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/arch
+            operator: In
+            values:
+            - amd64
+          - key: node-role.kubernetes.io/edge
+            operator: Exists
+  armAffinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/arch
+            operator: In
+            values:
+            - arm64
+          - key: node-role.kubernetes.io/edge
+            operator: Exists
+  cloudAffinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: node-role.kubernetes.io/edge
+            operator: DoesNotExist
+          - key: node-role.kubernetes.io/edgemesh-agent
+            operator: Exists
   nodeSelector: {}
   tolerations: {}
   resources:
@@ -89,7 +120,7 @@ agent:
       listenPort: 40001
       subNet: ""
       socks5Proxy:
-        enable: false
+        enable: true
         listenPort: 10800
     tunnel:
       enable: true

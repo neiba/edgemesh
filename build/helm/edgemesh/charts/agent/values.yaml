@@ -1,5 +1,8 @@
-image: kubeedge/edgemesh-agent:latest
+image: kubeedge/edgemesh-agent-amd64:1.10.0
+armImage: kubeedge/edgemesh-agent-arm64:1.10.0
 affinity: {}
+armAffinity: {}
+cloudAffinity: {}
 nodeSelector: {}
 tolerations: {}
 

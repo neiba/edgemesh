@@ -121,7 +121,7 @@ func (s *ProxyServer) Run() error {
 		return err
 	}
 
-	noEdgeMeshProxyName, err := labels.NewRequirement(labelEdgeMeshServiceProxyName, selection.DoesNotExist, nil)
+	noEdgeMeshProxyName, err := labels.NewRequirement(labelEdgeMeshServiceProxyName, selection.Equals, []string{"edgemesh-agent"})
 	if err != nil {
 		return err
 	}

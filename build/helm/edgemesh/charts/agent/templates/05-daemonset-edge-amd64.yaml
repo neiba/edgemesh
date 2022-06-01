@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: {{ .Release.Name }}-agent
+  name: {{ .Release.Name }}-agent-edge-amd64
   namespace: kubeedge
   labels:
     k8s-app: kubeedge
@@ -11,11 +11,13 @@ spec:
     matchLabels:
       k8s-app: kubeedge
       kubeedge: edgemesh-agent
+      role: edgemesh-agent-edge-amd64
   template:
     metadata:
       labels:
         k8s-app: kubeedge
         kubeedge: edgemesh-agent
+        role: edgemesh-agent-edge-amd64
     spec:
       hostNetwork: true
       {{- with .Values.nodeSelector }}
