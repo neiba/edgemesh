@@ -1,12 +1,45 @@
-image: kubeedge/edgemesh-agent:latest
-nodeName: "your node name"
+image: kubeedge/edgemesh-agent:v1.10.0-23-gc4f8df4e-linux-amd64
+armImage: kubeedge/edgemesh-agent:v1.10.0-23-gc4f8df4e-linux-arm64
+nodeName: ""
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
       nodeSelectorTerms:
       - matchExpressions:
         - key: node-role.kubernetes.io/edge
+          operator: Exists
+        - key: kubernetes.io/arch
+          operator: In
+          values:
+          - amd64
+        - key: node-role.kubernetes.io/gateway
+          operator: Exists
+armAffinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: node-role.kubernetes.io/edge
+          operator: Exists
+        - key: kubernetes.io/arch
+          operator: In
+          values:
+          - arm64
+        - key: node-role.kubernetes.io/gateway
+          operator: Exists
+cloudAffinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: node-role.kubernetes.io/edge
           operator: DoesNotExist
+        - key: kubernetes.io/arch
+          operator: In
+          values:
+          - amd64
+        - key: node-role.kubernetes.io/gateway
+          operator: Exists
 nodeSelector: {}
 tolerations: {}
 resources:

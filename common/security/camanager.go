@@ -145,7 +145,11 @@ func (m *caManager) applyCerts() error {
 	}
 
 	// save the edge.crt to the file
-	crt, _ := x509.ParseCertificate(edgeCert)
+	crt, err := x509.ParseCertificate(edgeCert)
+	if err != nil {
+		return fmt.Errorf("failed to parse the edge certificate, error: %w", err)
+	}
+
 	if err = certutil.WriteKeyAndCert(m.keyFile, m.certFile, pk, crt); err != nil {
 		return fmt.Errorf("failed to save the edge key and certificate to file: %s, error: %v", m.certFile, err)
 	}

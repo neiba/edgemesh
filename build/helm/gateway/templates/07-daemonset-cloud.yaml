@@ -1,7 +1,7 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ .Release.Name }}-cloud
   namespace: kubeedge
   labels:
     k8s-app: kubeedge
@@ -11,11 +11,13 @@ spec:
     matchLabels:
       k8s-app: kubeedge
       kubeedge: edgemesh-gateway
+      role: edgemesh-gateway-cloud
   template:
     metadata:
       labels:
         k8s-app: kubeedge
         kubeedge: edgemesh-gateway
+        role: edgemesh-gateway-cloud
     spec:
       {{- if (.Values.nodeName) }}
       nodeName: {{ .Values.nodeName }}
@@ -23,7 +25,7 @@ spec:
       {{- with .Values.nodeSelector }}
       nodeSelector: {{ toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.cloudAffinity }}
       affinity: {{ toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.tolerations }}
